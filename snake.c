@@ -187,9 +187,6 @@ void reset_snake() {
         free(temp);
     }
     
-    // head = NULL;
-    // tail = NULL;
-
     //create a new snake 
     Snake *new = malloc(sizeof(Snake));
     if (new == NULL) {
@@ -445,7 +442,6 @@ void render_snake() {
 
             track = track->next;
         }
-        free(track);
     }
 
     return;
@@ -497,7 +493,7 @@ void generate_apple() {
     int y = rand() % CELL_NUMBER_HORZ;
 
     //be sure the apple spawns in the grid 
-    if (x > CELL_NUMBER_VERTC || CELL_NUMBER_HORZ) {
+    if (x > CELL_NUMBER_VERTC || y > CELL_NUMBER_HORZ) {
         generate_apple();
     }
 
@@ -515,7 +511,6 @@ void generate_apple() {
         track = track->next;
     }
     
-    free(track);
     return;
 } 
 
@@ -567,6 +562,7 @@ int main(void) {
         // printf("apple.x = %i\n", Apple.posX);
         // printf("apple.y = %i\n", Apple.posY);
 
+        update();
         
         //clear the screen
         SDL_SetRenderDrawColor(renderer , 0x11, 0x11, 0x11, 255); //background color 
@@ -581,8 +577,6 @@ int main(void) {
         
         SDL_RenderPresent(renderer);
         
-        update();
-
         }
     }
 
