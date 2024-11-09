@@ -6,7 +6,7 @@
 #if 1
     #define WINDOW_WIDTH 800
     #define WINDOW_HEIGHT 1000
-#else 
+#else
     #define WINDOW_WIDTH 1920
     #define WINDOW_HEIGHT 1080
 #endif
@@ -20,6 +20,8 @@
 #define CELL_NUMBER_VERTC (WINDOW_WIDTH / CELL_SIZE)
 #define CELL_NUMBER_HORZ (WINDOW_HEIGHT / CELL_SIZE)
 
+#define INIT_DELAY_TIME 150
+#define DELAY_TIME_MIN 150
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -30,14 +32,14 @@ uint8_t is_grid_enabled = FALSE;
 uint8_t is_wall_enabled = TRUE; //adds walls to edges of the window
 u_int8_t is_play_random = FALSE;
 
-int delay_time = 180; //it changes the whole delay time and it effects the snakes movement speed
+
+int delay_time = INIT_DELAY_TIME; //it changes the whole delay time and it effects the snakes movement speed
+int score = 0;
 
 int last_frame_time = 0;
 
 int grid_x = (WINDOW_WIDTH / 2) - (GRID_DIM / 2);
 int grid_y = (WINDOW_HEIGHT / 2) - (GRID_DIM / 2);
-// int number_of_cells_vertc = WINDOW_HEIGHT / CELL_SIZE;
-// int number_of_cells_horz = WINDOW_WIDTH / CELL_SIZE;
 int number_of_cells_outside_v = GRID_SIZE - CELL_NUMBER_VERTC;
 int number_of_cells_outside_h = GRID_SIZE - CELL_NUMBER_HORZ;
 
@@ -53,7 +55,7 @@ struct snake
     int posY;
     int dir;
 
-    struct snake *next;     
+    struct snake *next;
 };
 
 typedef struct snake Snake;
@@ -179,15 +181,15 @@ void process_input(SDL_Event event) {
 
 void reset_snake() {
 
-    //free the snake body 
+    //free the snake body
     Snake *temp = head;
     while(head != NULL) {
         temp = head;
         head = head->next;
         free(temp);
     }
-    
-    //create a new snake 
+
+    //create a new snake
     Snake *new = malloc(sizeof(Snake));
     if (new == NULL) {
         is_game_running = FALSE;
@@ -201,22 +203,11 @@ void reset_snake() {
     head = new;
     tail = new;
 
-    increase_snake();
-    increase_snake();
+    //reset the delay time
+    delay_time = INIT_DELAY_TIME;
 
     increase_snake();
-    increase_snake();
 
-    increase_snake();
-    increase_snake();
-
-    increase_snake();
-    increase_snake();
-
-    increase_snake();
-    increase_snake();
-    
-    
     return;
 }
 
@@ -226,7 +217,7 @@ void move_snake() {
     int prevX = head->posX;
     int prevY = head->posY;
     int prevDir = head->dir;
-    
+
     //move the head
     switch (head->dir) {
         case SNAKE_UP:
@@ -269,7 +260,7 @@ void detect_crash() {
     int head_screen_posX = head->posX - (number_of_cells_outside_v / 2);
     int head_scrren_posY = head->posY - (number_of_cells_outside_h / 2);
     if (head_screen_posX >= CELL_NUMBER_VERTC || head_screen_posX < 0 || head_scrren_posY >= CELL_NUMBER_HORZ || head_scrren_posY < 0) {
-        
+
         if(is_wall_enabled) {
             // printf("Crash detected\n");
             reset_snake();
@@ -289,7 +280,7 @@ void detect_crash() {
                     break;
             }
         }
-    } 
+    }
 
     //TODO: add collusion detect for body
     int head_posX = head->posX;
@@ -304,7 +295,7 @@ void detect_crash() {
                 reset_snake();
             }
             track = track->next;
-        } 
+        }
     }
     return;
 }
@@ -313,6 +304,17 @@ void detect_apple() {
     if (head->posX == Apple.posX && head->posY == Apple.posY) {
         increase_snake();
         generate_apple();
+
+        //change the score
+        score += 10;
+
+        //reduce the delay time
+        if (delay_time > DELAY_TIME_MIN) {
+            delay_time -= 10;
+        } else {
+            delay_time = DELAY_TIME_MIN; //idk if this is a unnecessary operation
+        }
+
     }
     return;
 }
@@ -351,7 +353,7 @@ void play_random() {
 }
 
 void update() {
-    
+
     if (is_play_random) {
         play_random();
     }
@@ -370,7 +372,7 @@ void update() {
 
 void render_grid() {
 
-    SDL_SetRenderDrawColor(renderer, 120, 120, 120 ,255); 
+    SDL_SetRenderDrawColor(renderer, 120, 120, 120 ,255);
 
     if (is_grid_enabled == TRUE) {
 
@@ -387,7 +389,7 @@ void render_grid() {
         }
     } else {
         SDL_Rect outline;
-        
+
         outline.x = grid_x + 2 * CELL_SIZE; //change this
         outline.y = grid_y;
         outline.w = WINDOW_WIDTH;
@@ -414,7 +416,7 @@ void render_apple() {
 }
 
 void render_snake() {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // change this later - head color 
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // change this later - head color
 
     SDL_Rect snake_seg;
     snake_seg.h = CELL_SIZE;
@@ -423,21 +425,21 @@ void render_snake() {
     //render the head
     snake_seg.x = grid_x + (head->posX * CELL_SIZE);
     snake_seg.y = grid_y + (head->posY * CELL_SIZE);
-    
+
     SDL_RenderFillRect(renderer, &snake_seg);
 
 
-    //render the body 
+    //render the body
     if (head->next != NULL) {
         Snake *track = head->next;
 
-        SDL_SetRenderDrawColor(renderer, 52, 235, 58, 255); // body color 
+        SDL_SetRenderDrawColor(renderer, 52, 235, 58, 255); // body color
 
         while (track != NULL) {
-            
+
             snake_seg.x = grid_x + (track->posX * CELL_SIZE);
             snake_seg.y = grid_y + (track->posY * CELL_SIZE);
-            
+
             SDL_RenderFillRect(renderer, &snake_seg);
 
             track = track->next;
@@ -457,7 +459,7 @@ void increase_snake() {
     switch (tail->dir) {
         case SNAKE_UP:
             newSegment->posX = tail->posX;
-            newSegment->posY = tail->posY + 1; 
+            newSegment->posY = tail->posY + 1;
             break;
         case SNAKE_DOWN:
             newSegment->posX = tail->posX;
@@ -472,7 +474,7 @@ void increase_snake() {
             newSegment->posY = tail->posY;
             break;
     }
-    
+
     newSegment->dir = tail->dir;
     newSegment->next = NULL;
 
@@ -492,7 +494,7 @@ void generate_apple() {
     int x = rand() % CELL_NUMBER_VERTC + (number_of_cells_outside_v / 2);
     int y = rand() % CELL_NUMBER_HORZ;
 
-    //be sure the apple spawns in the grid 
+    //be sure the apple spawns in the grid
     if (x > CELL_NUMBER_VERTC || y > CELL_NUMBER_HORZ) {
         generate_apple();
     }
@@ -504,15 +506,15 @@ void generate_apple() {
         if(track->posX == x && track->posY == y) {
             generate_apple();
             break;
-        } else {        
+        } else {
             Apple.posX = x;
-            Apple.posY = y;           
+            Apple.posY = y;
         }
         track = track->next;
     }
-    
+
     return;
-} 
+}
 
 
 void setup() {
@@ -526,14 +528,14 @@ void setup() {
 
 //destroy the renderer, windowf and quit
 void quit() {
-    //free the snake  
+    //free the snake
     Snake *temp = head;
     while(head != NULL) {
         temp = head;
         head = head->next;
         free(temp);
     }
-    
+
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -563,9 +565,9 @@ int main(void) {
         // printf("apple.y = %i\n", Apple.posY);
 
         update();
-        
+
         //clear the screen
-        SDL_SetRenderDrawColor(renderer , 0x11, 0x11, 0x11, 255); //background color 
+        SDL_SetRenderDrawColor(renderer , 0x11, 0x11, 0x11, 255); //background color
         SDL_RenderClear(renderer);
         //RENDER LOOP START
 
@@ -574,9 +576,9 @@ int main(void) {
         render_snake();
 
         //RENDER LOOP END
-        
+
         SDL_RenderPresent(renderer);
-        
+
         }
     }
 
