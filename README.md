@@ -50,6 +50,7 @@ cd snake
 - Eat the food (represented by a square) to make the snake grow.
 - Avoid hitting the walls or the snake's own body.
 - You can toggle the walls with pressing the space key. (enabling or disabling walls)
+- You can pause the game by pressing p key.
 - To play random press x key.
 
 ## 📸 Screenshots
