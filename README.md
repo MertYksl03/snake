@@ -31,10 +31,10 @@ This repository contains the code for a simple Snake game written in C, utilizin
 
 2. Clone this repository:
 
-   ```bash
-   https://github.com/MertYksl03/snake.git
-   cd snake
-   ```
+```bash
+https://github.com/MertYksl03/snake.git
+cd snake
+```
 3. Compile the game:
   ```bash
     make build
@@ -53,10 +53,11 @@ You can toggle the walls with pressing the space key. (enabling or disabling wal
 To play random press x key.
 
 ## 📸 Screenshots
-![image](https://github.com/user-attachments/assets/3eea80d1-b697-4d22-bbf2-34fdfa331726)
-![image1](https://github.com/user-attachments/assets/6358df0e-0a0d-4a55-b571-068b31cfa74c)
-![image2](https://github.com/user-attachments/assets/bd28a2b4-55ee-4164-aead-36ad9a614e46)
-![iamge3](https://github.com/user-attachments/assets/662c6bba-078f-4176-9d5c-f355c31d13aa)
+![image](https://github.com/user-attachments/assets/dfff79f7-f895-463b-989d-a4fab0f8c8b7)
+![image1](https://github.com/user-attachments/assets/b39822f5-b643-49cc-be61-480131e49fe4)
+![image2](https://github.com/user-attachments/assets/8c28f62d-a7bc-4b88-9323-ef769e6ab32d)
+![image3](https://github.com/user-attachments/assets/907242e7-3be0-46bc-962c-93cd654b6645)
+
 
 
 
