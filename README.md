@@ -7,9 +7,9 @@ This repository contains the code for a simple Snake game written in C, utilizin
 - Snake grows longer every time it eats food.
 - The game ends if the snake collides with the wall or itself.
 - Different game modes:
--   Random mod
--   wall enabled
--   no walls
+-    Random mod
+-    Walls enabled
+-    No walls
 
 ## 💻 Technologies Used
 - **C** programming language
