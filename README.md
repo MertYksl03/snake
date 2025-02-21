@@ -32,7 +32,7 @@ This repository contains the code for a simple Snake game written in C, utilizin
 2. Clone this repository:
 
 ```bash
-https://github.com/MertYksl03/snake.git
+git clone https://github.com/MertYksl03/snake.git
 cd snake
 ```
 3. Compile the game:
