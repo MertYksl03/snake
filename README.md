@@ -46,11 +46,11 @@ cd snake
 5. Exit the game:
    You can press q or escape keys to close the game
 ## 🎮 How to Play
-Use the arrow keys(up, down, left, right) or W, A, S, D keys to control the snake.
-Eat the food (represented by a square) to make the snake grow.
-Avoid hitting the walls or the snake's own body.
-You can toggle the walls with pressing the space key. (enabling or disabling walls)
-To play random press x key.
+- Use the arrow keys(up, down, left, right) or W, A, S, D keys to control the snake.
+- Eat the food (represented by a square) to make the snake grow.
+- Avoid hitting the walls or the snake's own body.
+- You can toggle the walls with pressing the space key. (enabling or disabling walls)
+- To play random press x key.
 
 ## 📸 Screenshots
 ![image](https://github.com/user-attachments/assets/dfff79f7-f895-463b-989d-a4fab0f8c8b7)
