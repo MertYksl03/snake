@@ -1,4 +1,5 @@
 #include "header.h"
+#include <SDL2/SDL_render.h>
 
 #define WINDOW_X SDL_WINDOWPOS_CENTERED
 #define WINDOW_Y SDL_WINDOWPOS_CENTERED
@@ -22,20 +23,20 @@
 #define CELL_NUMBER_VERTC (WINDOW_WIDTH / CELL_SIZE)
 #define CELL_NUMBER_HORZ (WINDOW_HEIGHT / CELL_SIZE)
 
-#define INIT_DELAY_TIME 150
-#define DELAY_TIME_MIN 150
+#define DELAY_TIME_MAX 300
+#define DELAY_TIME_MIN 80
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-u_int8_t is_game_running = FALSE;
+uint8_t is_game_running = FALSE;
 uint8_t is_game_paused = FALSE;
 uint8_t is_grid_enabled = FALSE;
-uint8_t is_wall_enabled = TRUE; //adds walls to edges of the window
-u_int8_t is_play_random = FALSE;
+uint8_t is_wall_enabled = FALSE; //adds walls to edges of the window
+uint8_t is_play_random = FALSE;
 
 
-int delay_time = INIT_DELAY_TIME; //it changes the whole delay time and it effects the snakes movement speed
+int delay_time = DELAY_TIME_MAX; //it changes the whole delay time and it effects the snakes movement speed
 int score = 0;
 
 int last_frame_time = 0;
@@ -76,6 +77,7 @@ enum {
 void reset_snake();
 void generate_apple();
 void increase_snake();
+
 
 int initiliaze_window() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -118,6 +120,9 @@ void process_input(SDL_Event event) {
             case SDL_KEYDOWN:
                 switch(event.key.keysym.scancode) {
                     case SDL_SCANCODE_ESCAPE:
+                        is_game_running = FALSE;
+                        break;
+                    case SDL_SCANCODE_Q:
                         is_game_running = FALSE;
                         break;
                     //wasd or arrow keys to navigate snake
@@ -206,8 +211,10 @@ void reset_snake() {
     tail = new;
 
     //reset the delay time
-    delay_time = INIT_DELAY_TIME;
+    delay_time = DELAY_TIME_MAX;
 
+    //init snake size = 3
+    increase_snake();
     increase_snake();
 
     return;
@@ -284,7 +291,6 @@ void detect_crash() {
         }
     }
 
-    //TODO: add collusion detect for body
     int head_posX = head->posX;
     int head_posY = head->posY;
 
@@ -374,7 +380,7 @@ void update() {
 
 void render_grid() {
 
-    SDL_SetRenderDrawColor(renderer, 120, 120, 120 ,255);
+    SDL_SetRenderDrawColor(renderer, 120, 120, 120, 255);
 
     if (is_grid_enabled == TRUE) {
 

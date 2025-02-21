@@ -4,6 +4,6 @@ INCLUDES = SDL2
 
 
 build:
-	$(CC) $(CFLAGS) -o snake *c -l$(INCLUDES)
+	$(CC) $(CFLAGS) -o snake *c -lm -l$(INCLUDES)
 run:
 	make build && ./snake
